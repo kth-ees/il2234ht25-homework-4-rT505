@@ -30,13 +30,13 @@ always_comb begin
         IDLE         : n_state = (start) ? CALC_INVERSE : IDLE;
         CALC_INVERSE : begin
             sel_decoder = 2'b00;
-            sel_multiplier = 1'b00;
+            sel_multiplier = 2'b00;
             en_decoder_2to1 = 1'b0;
             n_state = (ready) ? CALC_OUTPUTS_aOut_cOut : CALC_INVERSE;
         end
         CALC_OUTPUTS_aOut_cOut : begin
             sel_decoder = 2'b10;
-            sel_multiplier = 1'b01;
+            sel_multiplier = 2'b01;
             en_decoder_2to1 = 1'b1;
             n_state = CALC_OUTPUTS_bOut_dOut;
         end
