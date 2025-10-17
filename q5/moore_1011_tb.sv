@@ -12,6 +12,24 @@ module moore_1011_tb ();
 		.w(w)
 	);
 
+    property seq_1011;
+        @(posedge clk)
+        disable iff (!rst_n)
+        w |-> ($past(j,4) && $past(!j,3) && $past(j,2) && $past(j,1));
+    endproperty
+
+    property duration_of_w;
+        @(posedge clk)
+        disable iff (!rst_n)
+        (w && !$past(w,1)) |-> (!$past(w,1));
+    endproperty
+
+    assert property (seq_1011)
+        else $error("Sequence 1011 did not occure!");
+
+    assert property (duration_of_w)
+        else $error("Duration of w exceeded 1 clk!");
+
 	always #5 clk = ~clk;
 
 	initial begin
@@ -31,6 +49,7 @@ module moore_1011_tb ();
 		#10; j = 1'b0;
 		#10; j = 1'b1;
 		#10; j = 1'b1;
+        
 
 		#20 $stop;
 	end
