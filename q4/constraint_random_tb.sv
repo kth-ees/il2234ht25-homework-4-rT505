@@ -3,22 +3,19 @@ class Burst;
     rand bit [31:0] addr;
     rand bit [3:0] write_en;
     rand bit read_en;
-    rand bit sel;
 
     constraint c_burst {
         burst_len inside {[2:8]};
         addr % 4 == 0;
         if(write_en) addr inside {[32'h1000_0000 : 32'h1000_FFFF]};
         if(read_en)  addr inside {[32'h0000_0000 : 32'h0000_FFFF]};
-        sel dist {0:/80, 1:/20};
 
     }  
-    constraint sel_weights {
-        if(sel == 0) {
-            read_en == 1;
+    constraint op_weights {
+        read_en dist {1 :=80, 0 :=20};
+        if(read_en) {
             write_en == 4'b0000;
         } else {
-            read_en == 0;
             write_en inside {4'b1111, 4'b1100, 4'b0011, 4'b1000, 4'b0100, 4'b0010, 4'b0001};
         }
     }
