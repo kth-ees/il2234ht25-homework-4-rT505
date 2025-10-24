@@ -21,7 +21,7 @@ module moore_1011_tb ();
     property duration_of_w;
         @(posedge clk)
         disable iff (!rst_n)
-        (w && !$past(w,1)) |-> (!$past(w,1));
+		$rose(w) |-> ##1 !w;
     endproperty
 
     assert property (seq_1011)
@@ -55,3 +55,4 @@ module moore_1011_tb ();
 	end
 
 endmodule
+
